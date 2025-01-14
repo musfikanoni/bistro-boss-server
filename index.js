@@ -51,7 +51,18 @@ async function run() {
       res.send(result);
     })
 
-
+    //for creating admin
+    app.patch('/users/admin/:id', async(req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id)};
+      const updatatedDoc = {
+        $set: {
+          role: 'admin'
+        }
+      }
+      const result = await userCollection.updateOne(filter, updatatedDoc);
+      res.send(result)
+    })
 
     //user delete
     app.delete('users/:id', async(req, res) => {
