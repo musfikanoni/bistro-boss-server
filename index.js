@@ -41,8 +41,18 @@ async function run() {
       res.send({ token });
     })
 
+    //middlewares
+    const verifyToken = (req, res, next) => {
+      console.log('inside verify token', req.headers);
+      if(!req.headers.authorization){
+        return res.status(401).send({message: 'Forbidden access'})
+      }
+      const token = req.headers.authorization.split(' ')[1];
+      // next();
+    }
+
     //user related api
-    app.get('/users', async(req, res) => {
+    app.get('/users', verifyToken, async(req, res) => {
       const result = await userCollection.find().toArray();
       res.send(result);
     })
