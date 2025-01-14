@@ -33,6 +33,11 @@ async function run() {
     const cartCollection = client.db("bistroDB").collection("carts");
 
     //user related api
+    app.get('/users', async(req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    })
+
     app.post('/users', async(req, res) => {
       const user = req.body;
       //insert email if doesn't exist
@@ -46,6 +51,15 @@ async function run() {
       res.send(result);
     })
 
+
+
+    //user delete
+    app.delete('users/:id', async(req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await userCollection.deleteOne(query);
+      res.send(result);
+    })
 
     //menu
     app.get('/menu', async(req,res) => {
